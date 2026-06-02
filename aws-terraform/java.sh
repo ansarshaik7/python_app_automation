@@ -8,7 +8,7 @@ if java -version &>/dev/null; then
     echo "Java is already installed. Version: $version"
 else
     echo "java version is not installed. Installing....."
-    sudo yum install java -y
+    sudo yum install java-21-amazon-corretto -y
 
     if [ $? -eq 0 ]; then
         echo "java version is installed sucessfully."

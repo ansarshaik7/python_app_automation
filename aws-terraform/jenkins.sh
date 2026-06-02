@@ -27,6 +27,9 @@ sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
 echo "🧱 Opening firewall port 8080..."
+sudo yum install firewalld -y
+sudo systemctl start firewalld
+sudo systemctl enable firewalld
 sudo firewall-cmd --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
 

@@ -20,6 +20,13 @@ module "vote_service_sg" {
       protocol    = "tcp"
       description = "Python App"
       cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 8080
+      to_port     = 8080
+      protocol    = "tcp"
+      description = "jenkins"
+      cidr_blocks = "0.0.0.0/0"
     }
   ]
 
