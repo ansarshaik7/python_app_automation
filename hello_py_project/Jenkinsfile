@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Git_checkout') {
+            steps {
+                git branch: 'main', credentialsId: 'e74e12c9-9490-4538-915b-51134ea2360e', url: 'https://github.com/ansarshaik7/python_app_automation.git'
+            }
+        }
+        stage('Docker_install') {
+            steps {
+                sh '''
+                sudo yum install docker -y
+                sudo systemctl start docker
+                sudo systemctl enable docker
+                sudo usermod -aG docker jenkins
+                '''
+            }
+        }
+        stage('Docker_build') {
+            steps {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_access_keys', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh ''' 
+                    aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 822127611269.dkr.ecr.ap-south-1.amazonaws.com
+                    pwd
+                    cd hello_py_project
+                    docker build -t python_app_repo .
+                    docker tag python_app_repo:latest 822127611269.dkr.ecr.ap-south-1.amazonaws.com/python_app_repo:latest
+                    docker push 822127611269.dkr.ecr.ap-south-1.amazonaws.com/python_app_repo:latest
+                    '''
+                }
+            }
+        }
+        stage('Docker_deploy') {
+            steps {
+                sh '''
+                docker stop python_app || true
+                docker rm python_app || true
+                docker run -d \
+                --name python_app \
+                -p 5000:5000 \
+                822127611269.dkr.ecr.ap-south-1.amazonaws.com/python_app_repo:latest
+                docker ps -a
+                '''
+            }
+        }
+    }
+}
