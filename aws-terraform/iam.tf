@@ -29,6 +29,7 @@ module "iam_role" {
     AmazonS3FullAccess  = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
     AmazonEC2ContainerRegistryPowerUser = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser"
     AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    AmazonEKSClusterPolicy = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
   }
 
   tags = {

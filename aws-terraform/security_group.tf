@@ -27,6 +27,20 @@ module "vote_service_sg" {
       protocol    = "tcp"
       description = "jenkins"
       cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 9000
+      to_port     = 9000
+      protocol    = "tcp"
+      description = "sonar"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 30000
+      to_port     = 32767
+      protocol    = "tcp"
+      description = "Kubernetes NodePort"
+      cidr_blocks = "0.0.0.0/0"
     }
   ]
 
