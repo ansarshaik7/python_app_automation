@@ -56,6 +56,8 @@ pipeline {
                 withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_access_keys', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                     sh '''
                     cd aws-terraform
+                    chmod +x kubectl.sh
+                    ./kubectl.sh
                     aws eks --region ap-south-1 update-kubeconfig --name python-app-cluster
                     kubectl apply -f aws-terraform/k8s/namespace.yaml
                     kubectl apply -f aws-terraform/k8s/deployment.yaml
