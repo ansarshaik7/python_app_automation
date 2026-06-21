@@ -33,3 +33,14 @@ else
     echo "kubectl installation failed"
     exit 1
 fi
+
+echo "Updating kubeconfig..."
+
+aws eks update-kubeconfig \
+--region ap-south-1 \
+--name python-app-eks
+
+
+echo "Checking nodes..."
+
+kubectl get nodes
