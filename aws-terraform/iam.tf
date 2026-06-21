@@ -5,22 +5,18 @@ module "iam_role" {
   name = "admin_role"
 
   trust_policy_permissions = {
-    TrustRoleAndServiceToAssume = {
+    TrustEC2Service = {
       actions = [
-        "sts:AssumeRole",
-        "sts:TagSession",
+        "sts:AssumeRole"
       ]
-      principals = [{
-        type = "AWS"
-        identifiers = [
-          "arn:aws:iam::822127611269:user/AnsarShaik",
-        ]
-      }]
-      condition = [{
-        test     = "StringEquals"
-        variable = "sts:ExternalId"
-        values   = ["some-secret-id"]
-      }]
+      principals = [
+        {
+          type = "Service"
+          identifiers = [
+            "ec2.amazonaws.com"
+          ]
+        }
+      ]
     }
   }
 

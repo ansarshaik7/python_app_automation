@@ -4,6 +4,10 @@ pipeline {
     stages {
         stage('Git_checkout') {
             steps {
+                sh '''
+                sudo yum install git -y
+                git --version
+                '''
                 git branch: 'main', credentialsId: 'e74e12c9-9490-4538-915b-51134ea2360e', url: 'https://github.com/ansarshaik7/python_app_automation.git'
             }
         }
@@ -32,6 +36,9 @@ pipeline {
             }
         }
         stage('Docker_deploy') {
+            when {
+                expression { return false }
+            }
             steps {
                 sh '''
                 docker stop python_app || true
@@ -42,6 +49,19 @@ pipeline {
                 822127611269.dkr.ecr.ap-south-1.amazonaws.com/python_app_repo:latest
                 docker ps -a
                 '''
+            }
+        }
+        stage('EKS_deploy') {
+            steps {
+                withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'aws_access_keys', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    sh '''
+                    cd aws-terraform
+                    aws eks --region ap-south-1 update-kubeconfig --name python-app-cluster
+                    kubectl apply -f aws-terraform/k8s/namespace.yaml
+                    kubectl apply -f aws-terraform/k8s/deployment.yaml
+                    kubectl apply -f aws-terraform/k8s/service.yaml
+                    '''
+                }
             }
         }
     }
