@@ -61,9 +61,12 @@ pipeline {
                     chmod +x kubectl.sh
                     ./kubectl.sh
                     aws eks --region ap-south-1 update-kubeconfig --name python-app-eks
-                    kubectl apply -f k8s/namespace.yaml
-                    kubectl apply -f k8s/deployment.yaml
-                    kubectl apply -f k8s/service.yaml
+                    helm package python-app
+                    helm upgrade --install python-app python-app-0.1.0.tgz \
+                    --namespace python-app \
+                    --create-namespace
+                    helm version
+                    helm install python-app ./python-app-chart
                     '''
                 }
             }
