@@ -1,0 +1,11 @@
+replicaCount: 2
+
+image:
+  repository: 822127611269.dkr.ecr.ap-south-1.amazonaws.com/python_app_repo
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 5000
