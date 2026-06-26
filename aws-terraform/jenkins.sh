@@ -5,7 +5,8 @@ set -e
 
 echo "🔧 Updating system packages..."
 sudo yum update -y
-
+sudo yum install helm -y
+helm version
 echo "📦 Adding Jenkins repo..."
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
